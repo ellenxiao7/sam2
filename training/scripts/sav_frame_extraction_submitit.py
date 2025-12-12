@@ -107,7 +107,7 @@ def submitit_launch(video_paths, sample_rate, save_root):
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
         for fid, frame in enumerate(frames):
-            frame_path = os.path.join(output_folder, f"{fid*sample_rate:05d}.jpg")
+            frame_path = os.path.join(output_folder, f"{fid * sample_rate:05d}.jpg")
             cv2.imwrite(frame_path, frame)
     print(f"Saved output to {save_root}")
 

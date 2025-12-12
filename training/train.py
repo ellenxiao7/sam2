@@ -190,9 +190,9 @@ def main(args) -> None:
             },
         }
         if "include_nodes" in submitit_conf:
-            assert (
-                len(submitit_conf["include_nodes"]) >= cfg.launcher.num_nodes
-            ), "Not enough nodes"
+            assert len(submitit_conf["include_nodes"]) >= cfg.launcher.num_nodes, (
+                "Not enough nodes"
+            )
             job_kwargs["slurm_additional_parameters"]["nodelist"] = " ".join(
                 submitit_conf["include_nodes"]
             )
@@ -241,7 +241,6 @@ def main(args) -> None:
 
 
 if __name__ == "__main__":
-
     initialize_config_module("sam2", version_base="1.2")
     parser = ArgumentParser()
     parser.add_argument(

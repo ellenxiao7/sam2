@@ -56,7 +56,6 @@ from strawberry.file_uploads import Upload
 
 @strawberry.type
 class Query:
-
     @strawberry.field
     def default_video(self) -> Video:
         """
@@ -90,7 +89,6 @@ class Query:
 
 @strawberry.type
 class Mutation:
-
     @strawberry.mutation
     def upload_video(
         self,

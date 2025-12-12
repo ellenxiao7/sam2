@@ -86,9 +86,9 @@ class VideoEvaluator:
 
         gt_array = np.array(Image.open(gt_mask_path))
         pred_array = np.array(Image.open(pred_mask_path))
-        assert (
-            gt_array.shape[-2:] == pred_array.shape[-2:]
-        ), f"shape mismatch: {gt_mask_path}, {pred_mask_path}"
+        assert gt_array.shape[-2:] == pred_array.shape[-2:], (
+            f"shape mismatch: {gt_mask_path}, {pred_mask_path}"
+        )
 
         if is_sav_format:
             assert len(np.unique(gt_array)) <= 2, (
@@ -181,9 +181,9 @@ def _seg2bmap(seg, width=None, height=None):
     ar1 = float(width) / float(height)
     ar2 = float(w) / float(h)
 
-    assert not (
-        width > w | height > h | abs(ar1 - ar2) > 0.01
-    ), "Cannot convert %dx%d seg to %dx%d bmap." % (w, h, width, height)
+    assert not (width > w | height > h | abs(ar1 - ar2) > 0.01), (
+        "Cannot convert %dx%d seg to %dx%d bmap." % (w, h, width, height)
+    )
 
     e = np.zeros_like(seg)
     s = np.zeros_like(seg)
@@ -454,8 +454,8 @@ def benchmark(
         # find max length for padding
         ml = max(*[len(n) for n in object_metrics.keys()], len("Global score"))
         # build header
-        out_string = f'{"sequence":<{ml}},{"obj":>3}, {"J&F":>4}, {"J":>4}, {"F":>4}\n'
-        out_string += f'{"Global score":<{ml}},{"":>3}, {global_jf:.1f}, {global_j:.1f}, {global_f:.1f}\n'
+        out_string = f"{'sequence':<{ml}},{'obj':>3}, {'J&F':>4}, {'J':>4}, {'F':>4}\n"
+        out_string += f"{'Global score':<{ml}},{'':>3}, {global_jf:.1f}, {global_j:.1f}, {global_f:.1f}\n"
         # append one line for each object
         for name, (iou, boundary_f) in object_metrics.items():
             for object_idx in iou.keys():

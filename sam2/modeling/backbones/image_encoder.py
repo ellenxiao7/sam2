@@ -22,9 +22,9 @@ class ImageEncoder(nn.Module):
         self.trunk = trunk
         self.neck = neck
         self.scalp = scalp
-        assert (
-            self.trunk.channel_list == self.neck.backbone_channel_list
-        ), f"Channel dims of trunk and neck do not match. Trunk: {self.trunk.channel_list}, neck: {self.neck.backbone_channel_list}"
+        assert self.trunk.channel_list == self.neck.backbone_channel_list, (
+            f"Channel dims of trunk and neck do not match. Trunk: {self.trunk.channel_list}, neck: {self.neck.backbone_channel_list}"
+        )
 
     def forward(self, sample: torch.Tensor):
         # Forward through backbone
@@ -100,7 +100,6 @@ class FpnNeck(nn.Module):
         self.fpn_top_down_levels = list(fpn_top_down_levels)
 
     def forward(self, xs: List[torch.Tensor]):
-
         out = [None] * len(self.convs)
         pos = [None] * len(self.convs)
         assert len(xs) == len(self.convs)

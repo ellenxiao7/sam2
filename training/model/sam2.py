@@ -460,7 +460,6 @@ class SAM2Train(SAM2Base):
         object_score_logits,
         current_out,
     ):
-
         assert gt_masks is not None
         all_pred_masks = [low_res_masks]
         all_pred_high_res_masks = [high_res_masks]

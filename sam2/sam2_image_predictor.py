@@ -110,9 +110,9 @@ class SAM2ImagePredictor:
         input_image = self._transforms(image)
         input_image = input_image[None, ...].to(self.device)
 
-        assert (
-            len(input_image.shape) == 4 and input_image.shape[1] == 3
-        ), f"input_image must be of size 1x3xHxW, got {input_image.shape}"
+        assert len(input_image.shape) == 4 and input_image.shape[1] == 3, (
+            f"input_image must be of size 1x3xHxW, got {input_image.shape}"
+        )
         logging.info("Computing image embeddings for the provided image...")
         backbone_out = self.model.forward_image(input_image)
         _, vision_feats, _, _ = self.model._prepare_backbone_features(backbone_out)
@@ -145,17 +145,17 @@ class SAM2ImagePredictor:
         assert isinstance(image_list, list)
         self._orig_hw = []
         for image in image_list:
-            assert isinstance(
-                image, np.ndarray
-            ), "Images are expected to be an np.ndarray in RGB format, and of shape  HWC"
+            assert isinstance(image, np.ndarray), (
+                "Images are expected to be an np.ndarray in RGB format, and of shape  HWC"
+            )
             self._orig_hw.append(image.shape[:2])
         # Transform the image to the form expected by the model
         img_batch = self._transforms.forward_batch(image_list)
         img_batch = img_batch.to(self.device)
         batch_size = img_batch.shape[0]
-        assert (
-            len(img_batch.shape) == 4 and img_batch.shape[1] == 3
-        ), f"img_batch must be of size Bx3xHxW, got {img_batch.shape}"
+        assert len(img_batch.shape) == 4 and img_batch.shape[1] == 3, (
+            f"img_batch must be of size Bx3xHxW, got {img_batch.shape}"
+        )
         logging.info("Computing image embeddings for the provided images...")
         backbone_out = self.model.forward_image(img_batch)
         _, vision_feats, _, _ = self.model._prepare_backbone_features(backbone_out)
@@ -305,12 +305,11 @@ class SAM2ImagePredictor:
     def _prep_prompts(
         self, point_coords, point_labels, box, mask_logits, normalize_coords, img_idx=-1
     ):
-
         unnorm_coords, labels, unnorm_box, mask_input = None, None, None, None
         if point_coords is not None:
-            assert (
-                point_labels is not None
-            ), "point_labels must be supplied if point_coords is supplied."
+            assert point_labels is not None, (
+                "point_labels must be supplied if point_coords is supplied."
+            )
             point_coords = torch.as_tensor(
                 point_coords, dtype=torch.float, device=self.device
             )
@@ -447,9 +446,9 @@ class SAM2ImagePredictor:
             raise RuntimeError(
                 "An image must be set with .set_image(...) to generate an embedding."
             )
-        assert (
-            self._features is not None
-        ), "Features must exist if an image has been set."
+        assert self._features is not None, (
+            "Features must exist if an image has been set."
+        )
         return self._features["image_embed"]
 
     @property

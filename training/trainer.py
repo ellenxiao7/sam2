@@ -165,7 +165,6 @@ class Trainer:
         meters: Optional[Dict[str, Any]] = None,
         loss: Optional[Dict[str, Any]] = None,
     ):
-
         self._setup_env_variables(env_variables)
         self._setup_timers()
 
@@ -201,9 +200,9 @@ class Trainer:
         set_seeds(seed_value, self.max_epochs, self.distributed_rank)
         log_env_variables()
 
-        assert (
-            is_dist_avail_and_initialized()
-        ), "Torch distributed needs to be initialized before calling the trainer."
+        assert is_dist_avail_and_initialized(), (
+            "Torch distributed needs to be initialized before calling the trainer."
+        )
 
         self._setup_components()  # Except Optimizer everything is setup here.
         self._move_to_device()
@@ -213,9 +212,9 @@ class Trainer:
         self.time_elapsed_meter = DurationMeter("Time Elapsed", self.device, ":.2f")
 
         if self.checkpoint_conf.resume_from is not None:
-            assert os.path.exists(
-                self.checkpoint_conf.resume_from
-            ), f"The 'resume_from' checkpoint {self.checkpoint_conf.resume_from} does not exist!"
+            assert os.path.exists(self.checkpoint_conf.resume_from), (
+                f"The 'resume_from' checkpoint {self.checkpoint_conf.resume_from} does not exist!"
+            )
             dst = os.path.join(self.checkpoint_conf.save_dir, "checkpoint.pt")
             if self.distributed_rank == 0 and not os.path.exists(dst):
                 # Copy the "resume_from" checkpoint to the checkpoint folder
@@ -289,7 +288,6 @@ class Trainer:
             raise ValueError(f"Unsupported accelerator: {accelerator}")
 
     def _setup_ddp_distributed_training(self, distributed_conf, accelerator):
-
         assert isinstance(self.model, torch.nn.Module)
 
         self.model = nn.parallel.DistributedDataParallel(
@@ -453,7 +451,6 @@ class Trainer:
         model: nn.Module,
         phase: str,
     ):
-
         outputs = model(batch)
         targets = batch.masks
         batch_size = len(batch.img_batch)
@@ -525,7 +522,6 @@ class Trainer:
             self.train_dataset = instantiate(self.data_conf.train)
 
     def run_train(self):
-
         while self.epoch < self.max_epochs:
             dataloader = self.train_dataset.get_loader(epoch=int(self.epoch))
             barrier()
@@ -615,7 +611,6 @@ class Trainer:
         end = time.time()
 
         for data_iter, batch in enumerate(val_loader):
-
             # measure data loading time
             data_time.update(time.time() - end)
 
@@ -701,7 +696,6 @@ class Trainer:
         }
 
     def train_epoch(self, train_loader):
-
         # Init stat meters
         batch_time_meter = AverageMeter("Batch Time", self.device, ":.2f")
         data_time_meter = AverageMeter("Data Time", self.device, ":.2f")
@@ -956,9 +950,9 @@ class Trainer:
     def _check_val_key_match(self, val_keys, phase):
         if val_keys is not None:
             # Check if there are any duplicates
-            assert len(val_keys) == len(
-                set(val_keys)
-            ), f"Duplicate keys in val datasets, keys: {val_keys}"
+            assert len(val_keys) == len(set(val_keys)), (
+                f"Duplicate keys in val datasets, keys: {val_keys}"
+            )
 
             # Check that the keys match the meter keys
             if self.meters_conf is not None and phase in self.meters_conf:
@@ -977,7 +971,6 @@ class Trainer:
                 )
 
     def _setup_components(self):
-
         # Get the keys for all the val datasets, if any
         val_phase = Phase.VAL
         val_keys = None
